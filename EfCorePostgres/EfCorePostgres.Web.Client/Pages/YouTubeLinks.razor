@@ -1,5 +1,5 @@
 @page "/youtube-links"
-@rendermode InteractiveWebAssembly
+@rendermode @(new InteractiveWebAssemblyRenderMode(prerender: false))
 @inject YouTubeLinksClient Client
 
 <PageTitle>YouTube Links</PageTitle>
