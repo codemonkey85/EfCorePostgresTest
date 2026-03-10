@@ -12,11 +12,6 @@ builder.Services.AddRazorComponents()
 
 builder.Services.AddOutputCache();
 
-builder.Services.AddHttpClient<WeatherApiClient>(client =>
-{
-    client.BaseAddress = new("https+http://apiservice");
-});
-
 // Named HTTP client used to proxy YouTube links calls to the API service.
 builder.Services.AddHttpClient("apiservice", client =>
 {
