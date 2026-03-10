@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="EfCorePostgres.ApiService/EfCorePostgres.ApiService.csproj" />
+  <Project Path="EfCorePostgres.AppHost/EfCorePostgres.AppHost.csproj" />
+  <Project Path="EfCorePostgres.ServiceDefaults/EfCorePostgres.ServiceDefaults.csproj" />
+  <Project Path="EfCorePostgres.Web/EfCorePostgres.Web.csproj" />
+  <Project Path="EfCorePostgres.Web.Client/EfCorePostgres.Web.Client.csproj" />
+</Solution>

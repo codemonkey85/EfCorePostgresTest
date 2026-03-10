@@ -40,6 +40,12 @@ bld/
 # (https://github.com/github/gitignore/pull/3736)
 #!**/[Bb]in/*.refresh
 
+# Roslyn/MSBuild build host directories.
+# On macOS these are created as a single path component named "bin\Debug" (literal
+# backslash), so the **/[Bb]in/* pattern above does not match them.
+**/BuildHost-net472/
+**/BuildHost-netcore/
+
 # Visual Studio 2015/2017 cache/options directory
 .vs/
 # Uncomment if you have tasks that create the project's static files in wwwroot
@@ -416,3 +422,16 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
+*.DS_Store
+*thumbs.db*
+
+.idea
+.claude/worktrees/
+
+# Azure Developer CLI - environment-specific data (secrets, subscription IDs, etc.)
+# azure.yaml is committed; .azure/ is not
+.azure/
+
+# Client-side libraries managed by libman (restore with: libman restore)
+**/wwwroot/lib/

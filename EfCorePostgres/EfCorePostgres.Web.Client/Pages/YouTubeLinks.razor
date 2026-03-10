@@ -1,0 +1,103 @@
+@page "/youtube-links"
+@rendermode InteractiveWebAssembly
+@inject YouTubeLinksClient Client
+
+<PageTitle>YouTube Links</PageTitle>
+
+<h1>YouTube Links</h1>
+
+@if (links is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Key</th>
+                <th>URL</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var link in links)
+            {
+                <tr>
+                    <td>@link.Key</td>
+                    <td><a href="@link.Url" target="_blank">@link.Url</a></td>
+                    <td>
+                        <button class="btn btn-sm btn-danger" @onclick="() => DeleteAsync(link.Key)">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<h3 class="mt-4">Add New Link</h3>
+<div class="row g-3 align-items-end" style="max-width:600px">
+    <div class="col">
+        <label class="form-label">Key</label>
+        <input class="form-control" @bind="newKey" placeholder="e.g. my-video" />
+    </div>
+    <div class="col">
+        <label class="form-label">URL</label>
+        <input class="form-control" @bind="newUrl" placeholder="https://youtube.com/watch?v=..." />
+    </div>
+    <div class="col-auto">
+        <button class="btn btn-primary" @onclick="CreateAsync">Add</button>
+    </div>
+</div>
+@if (errorMessage is not null)
+{
+    <div class="alert alert-danger mt-2">@errorMessage</div>
+}
+
+@code {
+    private YouTubeLinkModel[]? links;
+    private string newKey = "";
+    private string newUrl = "";
+    private string? errorMessage;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadAsync();
+    }
+
+    private async Task LoadAsync()
+    {
+        links = await Client.GetAllAsync();
+    }
+
+    private async Task CreateAsync()
+    {
+        errorMessage = null;
+        if (string.IsNullOrWhiteSpace(newKey) || string.IsNullOrWhiteSpace(newUrl))
+        {
+            errorMessage = "Both Key and URL are required.";
+            return;
+        }
+
+        var response = await Client.CreateAsync(newKey.Trim(), newUrl.Trim());
+        if (response.IsSuccessStatusCode)
+        {
+            newKey = "";
+            newUrl = "";
+            await LoadAsync();
+        }
+        else
+        {
+            errorMessage = $"Failed to add link: {response.ReasonPhrase}";
+        }
+    }
+
+    private async Task DeleteAsync(string key)
+    {
+        var response = await Client.DeleteAsync(key);
+        if (response.IsSuccessStatusCode)
+        {
+            await LoadAsync();
+        }
+    }
+}
